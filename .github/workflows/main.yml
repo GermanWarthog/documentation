@@ -21,6 +21,8 @@ jobs:
           node-version: 16.x
           cache: pnpm
 
+      - name: Install dependencies
+        run: pnpm install i
       - name: Build website
         run: pnpm build
 
