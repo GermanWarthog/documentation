@@ -1,35 +1,40 @@
-name: Deploy to GitHub Pages
+name: Optimize map and deploy
 
-on:
-  push:
-    branches:
-      - main
+on: [ push ]
+
+permissions:
+  contents: write
+  pages: write
+  actions: write
 
 jobs:
   deploy:
-    name: Deploy to GitHub Pages
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
 
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 8.6.0
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
 
       - uses: actions/setup-node@v3
         with:
-          node-version: 16.x
-          cache: pnpm
+          node-version: '16.x'
+          registry-url: 'https://registry.npmjs.org'
 
-      - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile
-      - name: Build website
-        run: pnpm build
+      - name: "Install dependencies"
+        run: npm install
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+      - name: "Build scripts"
+        run: npm run build
+
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@releases/v3
+        if: github.ref == 'refs/heads/master'
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./out
-          user_name: github-actions[bot]
-          user_email: 41898282+github-actions[bot]@users.noreply.github.com
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages 
+          FOLDER: dist/ 
+          BASE_BRANCH: master
+
+      - name: Bash2
+        run: |
+          ls -al
