@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://cmodcraft-studios.eu
+
+# Sitemaps
+Sitemap: https://cmodcraft-studios.eu/sitemap.xml
